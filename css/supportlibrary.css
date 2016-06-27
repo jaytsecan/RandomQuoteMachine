@@ -1,0 +1,23 @@
+.alert {
+  padding: 10px;
+  padding-left: calc(25px + 5vw);
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  width: 50vw;
+  font-size: calc(12px + .25vw);
+}
+.my-fade-effect {
+  opacity: 1;
+  transition: opacity .5s;
+}
+.my-fade-out {
+  opacity: 0;
+}
+.my-alert-hidden {
+  visibility: hidden;
+}
+.my-alert-visible {
+  visibility: visible;
+}

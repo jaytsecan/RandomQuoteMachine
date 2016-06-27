@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Tangerine" />
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" />
+  <!-- Define my CSS3 files here -->
+  <link rel="stylesheet" href="./css/supportlibrary.css" />
+  <link rel="stylesheet" href="./css/main.css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+  <title>Random Quote Machine</title>
+</head>
+
+<body>
+  <div class="container-fluid">
+    <div class="well my-header my-box-shadow">
+      <p class="text-center">
+        <strong>Random Quote Machine</strong>
+      </p>
+    </div>
+  </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-6 col-xs-offset-2">
+        <div id="myAlert" class="alert my-alert-hidden">
+          <a id="myAlertClose" href="#" class="close">&times;</a>
+          <div id="myAlertMessage">Default Alert Text</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-9 col-xs-offset-1 my-quote my-box-shadow">
+        <div class="my-blockquote">
+          <p id="quote-text"></p>
+          <cite id="quote-author"></cite>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-xs-8 col-xs-offset-3">
+        <div class="btn-toolbar">
+          <button id="tweetQuote" type="button" class="btn btn-info btn-twitter"><i class="fa fa-twitter"></i>&ensp;Tweet Quote</button>
+          <button id="refreshQuote" type="button" class="btn btn-info"><span class="glyphicon glyphicon-refresh" id="animateRefreshIcon"></span>&ensp;Manual Refresh</button>
+          <div class="btn-group" data-toggle="tooltip" title="Note: Functionality not yet implemented :(" placement="top">
+            <a id="autoRefreshQuote" class="btn btn-info dropdown-toggle btn-select" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-refresh"></span>&ensp;Auto-Refresh: OFF&ensp;<span class="caret"></span></a>
+            <ul id="autoRefreshSelection" class="dropdown-menu">
+              <li class="dropdown-header">Select Auto-Refresh Frequency :</li>
+              <li><a href="#" data-label="0">DISABLE Auto-Refresh</a></li>
+              <li><a href="#" data-label="15">Refresh Every: 15 seconds</a></li>
+              <li><a href="#" data-label="30">Refresh Every: 30 seconds</a></li>
+              <li><a href="#" data-label="60">Refresh Every: 1 minute</a></li>
+              <li><a href="#" data-label="120">Refresh Every: 2 minutes</a></li>
+            </ul>
+          </div>
+          <div class="btn-group">
+            <a id="quoteQptions" class="btn btn-info dropdown-toggle btn-select" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-cog"></span>&ensp;Options&ensp;<span class="caret"></span></a>
+            <ul id="optionSelection" class="dropdown-menu">
+              <li class="dropdown-header">Select Quote Source :</li>
+              <li><a href="#" data-label="0">Random Quote Machine (Local Source)</a></li>
+              <li><a href="#" data-label="1">Storm Consultancy</a></li>
+              <li><a href="#" data-label="2">Forismatic</a></li>
+              <li><a href="#" data-label="3">Quotes On Design</a></li>
+              <li class="disabled"><a href="#" data-label="4">AndruXnet Random-Famous-Quotes</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer class="my-footer">
+    <p>Web App Developed And Designed By:
+      <a href="https://www.freecodecamp.com/jaytsecan">
+        <strong>Jay Tse</strong>
+      </a>
+    </p>
+  </footer>
+
+  <!-- Define my JavaScript files here -->
+  <script src="./js/supportlibrary.js"></script>
+  <script src="./js/main.js"></script>
+  <script>
+    $(document).ready(function() {
+      $('[data-toggle="tooltip"]').tooltip();
+    });
+
+  </script>
+
+</body>
+
+</html>
