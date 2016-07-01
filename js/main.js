@@ -149,6 +149,7 @@
   // Keep track of the user's currently selected quote source
   // By default, it is "Local Source"
   var currentQuoteSource = RQM_CONSTANTS.DEFAULT_QUOTE_SOURCE;
+  var currentAutoRefreshIntervalId = 0;
 
   // Define function to make a call to the local quote source
   // --------------------------------------------------------
@@ -237,27 +238,27 @@
     hideAlert(RQM_CONSTANTS.MY_ALERT);
     // next, start animating the refresh icon and disable the button to prevent multiple requests
     beginManualRefresh();
+    apiToCall();
+  }
 
+  function apiToCall() {
     // Based on connection method of quote source, call the appropriate function
     switch (QUOTE_SOURCES[currentQuoteSource].type) {
       case "LOCAL":
         {
-          callLocalSouceApi(QUOTE_SOURCES[currentQuoteSource].responseProcessingFunction, updateMainQuote);
-          break;
+          return callLocalSouceApi(QUOTE_SOURCES[currentQuoteSource].responseProcessingFunction, updateMainQuote);
         }
       case "CORS":
         {
-          callCorsRestApi(QUOTE_SOURCES[currentQuoteSource].url, QUOTE_SOURCES[currentQuoteSource].responseProcessingFunction, updateMainQuote);
-          break;
+          return callCorsRestApi(QUOTE_SOURCES[currentQuoteSource].url, QUOTE_SOURCES[currentQuoteSource].responseProcessingFunction, updateMainQuote);
         }
       case "CORSPROXY":
         {
-          callCorsProxyRestApi(QUOTE_SOURCES[currentQuoteSource].url, QUOTE_SOURCES[currentQuoteSource].responseProcessingFunction, updateMainQuote);
-          break;
+          return callCorsProxyRestApi(QUOTE_SOURCES[currentQuoteSource].url, QUOTE_SOURCES[currentQuoteSource].responseProcessingFunction, updateMainQuote);
         }
       default:
         {
-          callLocalSouceApi(QUOTE_SOURCES[currentQuoteSource].responseProcessingFunction, updateMainQuote);
+          return callLocalSouceApi(QUOTE_SOURCES[currentQuoteSource].responseProcessingFunction, updateMainQuote);
         }
     }
   }
@@ -265,10 +266,14 @@
   function autoRefreshSelectionClickedEventHandler(event) {
     // first, remove any existing alerts
     hideAlert(RQM_CONSTANTS.MY_ALERT);
+    // next clear OLD auto refresh interval
+    window.clearInterval(currentAutoRefreshIntervalId);
+
     var interval = Number(event.target.getAttribute("data-label"));
     if (!isNaN(interval) && 0 <= interval && interval <= 3600) {
       // If 0, then disable autorefresh
       if (interval === 0) {
+
         RQM_CONSTANTS.MANUAL_REFRESH_BUTTON_ELEMENT.removeAttribute("disabled");
         RQM_CONSTANTS.AUTO_REFRESH_BUTTON_ELEMENT.classList.remove("btn-warning");
         RQM_CONSTANTS.AUTO_REFRESH_BUTTON_ELEMENT.classList.add("btn-info");
@@ -282,6 +287,10 @@
         RQM_CONSTANTS.AUTO_REFRESH_BUTTON_ELEMENT.innerHTML = "<span class=\"glyphicon glyphicon-refresh\">" +
           "</span>&ensp;Auto-Refresh: ON (" + intervalTime + intervalUnit +
           ")&ensp;<span class=\"caret\"></span>";
+        // set interval to call refreshquote
+        currentAutoRefreshIntervalId = window.setInterval(function () {
+          apiToCall();
+        }, interval * 1000);
       }
     }
   }
