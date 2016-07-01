@@ -3,6 +3,10 @@
 // window.addEventListener("load", randomQuoteMachine, false);
 // OR document.addEventListener("DOMContentLoaded", randomQuoteMachine, false);
 
+// TODO
+// 1. Add stability my using multiple CORS backup proxy servers/services.  This way
+//    if some of them are down, RQM will still be able to use the backup ones without breaking
+
 (function randomQuoteMachine() {
   "use strict";
 
@@ -112,14 +116,18 @@
     {
       name: "AndruXnet Random-Famous-Quotes",
       url: "https://andruxnet-random-famous-quotes.p.mashape.com/?cat=famous",
-      headers: {},
+      headers: {
+        "X-Mashape-Key": "rAWCIdFE64mshRkI5bNIUO5zabbLp1q2CHRjsnRjRxFJQCVyQC",
+        "Content-Type": "application/x-www-form-urlencoded",
+        "Accept": "application/json"
+      },
       format: "JSON",
       method: "POST",
       type: "CORS",
       responseProcessingFunction: function (responseString) {
         var obj = JSON.parse(responseString);
-        quoteDataModel.quoteText = obj[0].content;
-        quoteDataModel.quoteAuthor = obj[0].title;
+        quoteDataModel.quoteText = obj.quote;
+        quoteDataModel.quoteAuthor = obj.author;
       }
     }
   ];
@@ -128,7 +136,8 @@
   // ------------------------------------------------------------------
   var RQM_CONSTANTS = {
     HTTP_SUCCESS_STATUS_CODE: 200,
-    //CORS_PROXY_URL: "https://jsonp.afeld.me/?url=",
+    BACKUP1_CORS_PROXY_URL: "https://jsonp.afeld.me/?url=",
+    BACKUP2_CORS_PROXY_URL: "http://cors.io/?u=",
     CORS_PROXY_URL: "https://crossorigin.me/",
     DEFAULT_QUOTE_SOURCE: 0,
     NO_OF_LOCAL_QUOTES: LOCAL_SOURCE_QUOTES_ARRAY.length,
@@ -179,8 +188,17 @@
       }
 
     };
+
     // Open connection for asynchronous request
     request.open(QUOTE_SOURCES[currentQuoteSource].method, url, true);
+    // if POST request, add headers
+    if (QUOTE_SOURCES[currentQuoteSource].hasOwnProperty("headers")) {
+      for (var header in QUOTE_SOURCES[currentQuoteSource].headers) {
+        request.setRequestHeader(header, QUOTE_SOURCES[currentQuoteSource].headers[header]);
+      }
+    }
+    // Since GET requests send params as part of the url, and our POST requests have no
+    // params to send in the body, we send null as the body of the request
     request.send(null);
   }
 
