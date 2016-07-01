@@ -150,6 +150,7 @@
   // By default, it is "Local Source"
   var currentQuoteSource = RQM_CONSTANTS.DEFAULT_QUOTE_SOURCE;
   var currentAutoRefreshIntervalId = 0;
+  var autoRefreshEnabled = false;
 
   // Define function to make a call to the local quote source
   // --------------------------------------------------------
@@ -217,7 +218,9 @@
     // re-enable the manual refresh button
     RQM_CONSTANTS.MANUAL_REFRESH_BUTTON_ELEMENT.classList.remove("btn-warning");
     RQM_CONSTANTS.MANUAL_REFRESH_BUTTON_ELEMENT.classList.add("btn-info");
-    RQM_CONSTANTS.MANUAL_REFRESH_BUTTON_ELEMENT.removeAttribute("disabled");
+    if (!autoRefreshEnabled) {
+      RQM_CONSTANTS.MANUAL_REFRESH_BUTTON_ELEMENT.removeAttribute("disabled");
+    }
     // stop animating the refresh icon
     RQM_CONSTANTS.ANIMATED_REFRESH_ICON_ELEMENT.classList.remove("glyphicon-refresh-animate");
   }
@@ -273,12 +276,13 @@
     if (!isNaN(interval) && 0 <= interval && interval <= 3600) {
       // If 0, then disable autorefresh
       if (interval === 0) {
-
+        autoRefreshEnabled = false;
         RQM_CONSTANTS.MANUAL_REFRESH_BUTTON_ELEMENT.removeAttribute("disabled");
         RQM_CONSTANTS.AUTO_REFRESH_BUTTON_ELEMENT.classList.remove("btn-warning");
         RQM_CONSTANTS.AUTO_REFRESH_BUTTON_ELEMENT.classList.add("btn-info");
         RQM_CONSTANTS.AUTO_REFRESH_BUTTON_ELEMENT.innerHTML = RQM_CONSTANTS.AUTO_REFRESH_BUTTON_ELEMENT_DISABLE;
       } else { // enable autorefresh
+        autoRefreshEnabled = true;
         var intervalUnit = (interval < 60) ? " sec" : " min";
         var intervalTime = (interval / 60 < 1) ? interval : (Math.floor(interval / 60));
         RQM_CONSTANTS.MANUAL_REFRESH_BUTTON_ELEMENT.setAttribute("disabled", "disabled");
