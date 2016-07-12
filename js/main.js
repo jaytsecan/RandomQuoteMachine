@@ -325,6 +325,9 @@
         currentQuoteSource = quoteSourceIndex;
         displayAlert(RQM_CONSTANTS.MY_ALERT, "info", RQM_CONSTANTS.MSG_QUOTE_SOURCE_CHANGED +
           "\"<strong>" + QUOTE_SOURCES[quoteSourceIndex].name + "</strong>\" ", true, 0);
+        window.setTimeout(function () {
+          fadeOutAlert(RQM_CONSTANTS.MY_ALERT);
+        }, 3000);
       }
     }
   }
@@ -335,7 +338,7 @@
   })();
 
   /**
-   * [Add custom event listerners used by my application,
+   * [Add custom event listeners used by my application,
    * i.e. wire up the component, event, and eventhandler]
    */
   (function addCustomEventListeners() {
